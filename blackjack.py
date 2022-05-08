@@ -111,10 +111,10 @@ def play_blackjack(play_again):
   """Play blackjack"""
   
   while not play_again:
-    user_hand = ['2','A','5','A']
+    user_hand = []
     users_score = 0
-    #deal_cards(user_hand)
-    #deal_cards(user_hand)   
+    deal_cards(user_hand)
+    deal_cards(user_hand)   
     dealers_hand = []
     dealers_score = 0
     deal_cards(dealers_hand)
