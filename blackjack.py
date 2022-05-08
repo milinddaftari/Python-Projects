@@ -52,22 +52,22 @@ def calculate_score(user_hand, dealers_hand):
   users_score = 0
   dealers_score = 0
   
-  userAcount = user_hand.count("A")
-  dealersAcount = dealers_hand.count("A")
+  user_A_count = user_hand.count("A")
+  dealers_A_count = dealers_hand.count("A")
   
   for card in user_hand:
     if card != "A":
-      user_score += deck[card]
+      users_score += deck[card]
   
-  if userAcount > 0:
-    user_score += 11 + (userAcount-1)
+  if user_A_count > 0:
+    users_score += 11 + (user_A_count-1)
     
   for card in dealers_hand:
     if card != "A":
       dealers_score += deck[card]
   
-  if dealersAcount > 0:
-    dealers_score += 11 + (dealersAcount-1)
+  if dealers_A_count > 0:
+    dealers_score += 11 + (dealers_A_count-1)
     
   return users_score,dealers_score
 
