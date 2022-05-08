@@ -1,4 +1,4 @@
-from art import logo
+from blackjack_art import logo
 from os import system, name
 import random
 
