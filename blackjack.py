@@ -15,14 +15,16 @@ deck = {
   "10": 10,
   "J": 10,
   "Q": 10,
-  "K": 10,
+  "K": 10
 }
 
 def deal_cards(hand):
+  """Deal a new card and add to current hand"""
   hand = hand.append(random.choice(list(deck)))
 
 
 def is_blackjack(user_hand, dealers_hand):
+  """Verify if either of the input hands have a Blackjack eligible pair"""
   user_count = 0
   dealer_count = 0
   for hand in user_hand:
@@ -46,119 +48,124 @@ def is_blackjack(user_hand, dealers_hand):
   
 
 def calculate_score(user_hand, dealers_hand):
+  """Calculate total scores of the input hands and also update the value of 'A' according to the total value of the hand"""
   users_score = 0
   dealers_score = 0
-
+  
+  index_pos_user_hand = []
+  pos_user_hand = 0
+  index_pos_dealers_hand = []
+  pos_dealers_hand = 0
+  while True:
+    pos_user_hand = user_hand.index("A", pos_user_hand)
+    index_pos_user_hand.append(pos_user_hand)
+    pos_user_hand += 1
+  while True:
+    pos_dealers_hand = user_hand.index("A", pos_dealers_hand)
+    index_pos_dealers_hand.append(pos_dealers_hand)
+    pos_dealers_hand += 1
+  
   for hand in user_hand:
-    if hand == "A" and ((users_score + 11) > 21):
-      users_score += 1
-    else:
-      users_score += deck[hand]
-  print(f"User's score {users_score}")
+    if hand == user_hand[index_pos_user_hand]:
+      deck[hand].value
+      
+      
+
   for hand in dealers_hand:
-    if hand == "A" and dealers_score > 21:
-      dealers_score += 1
-    else:
-      dealers_score += deck[hand]
-  print(f"Computer's partial score {deck[dealers_hand[0]]}")
+    dealers_score += deck[hand]
+    
+  
   return users_score,dealers_score
 
 def play_again_choice(play_again):
+  """Choice to play again"""
   play_again_choice_selection = input("GAME OVER - Do you want to play again (Y / N): ")
   if play_again_choice_selection.upper() == "Y":
     play_again = True
-  elif play_again_choice_selection.upper() == "N":
-    play_again = False
   else:
-    print("Incorrect Input - Ending the Game")
     play_again = False
   return play_again
 
 def clear():
-   # for windows
-   if name == 'nt':
+  """Clear the screen""" 
+  # for windows
+  if name == 'nt':
     _ = system('cls')
 
    # for mac and linux
-   else:
+  else:
     _ = system('clear')
 
+def compare(users_score, dealers_score):
+  """Verify and compare the user's score and the dealer's score"""
+  if users_score > 21 and dealers_score > 21:
+    return "Score exceeds 21 for both the user and the computer. Computer wins"
 
-def play_blackjack():
-  play_again = True
-  while play_again:
+  if users_score == dealers_score:
+    return "DRAW"
+  elif users_score > 21:
+    return "BUST: You loose. User's score exceeded 21"
+  elif dealers_score > 21:
+    return "WIN: User Wins as Computer's Score exceeds 21"
+  elif users_score > dealers_score:
+    return f"WIN: User Wins as User's Score {users_score} is greater than Computer's Score {dealers_score}"
+  else:
+    return f"BUST: You loose as User's Score {users_score} is less than Computer's Score {dealers_score}"
+
+
+def play_blackjack(play_again):
+  """Play blackjack"""
+  
+  while not play_again:
+    user_hand = ['2','A','5','A']
+    users_score = 0
+    #deal_cards(user_hand)
+    #deal_cards(user_hand)   
+    dealers_hand = []
+    dealers_score = 0
+    deal_cards(dealers_hand)
+    deal_cards(dealers_hand)
     clear()
     print(logo)
-    play_again = False
-    user_hand = []
-    deal_cards(user_hand)
-    deal_cards(user_hand)
-    print(f"USER'S HAND IS {user_hand}")
-    
-    dealers_hand = []
-    deal_cards(dealers_hand)
-    deal_cards(dealers_hand)
-    print(f"COMPUTER'S HAND IS ['{dealers_hand[0]}', 'X']")  
-    
-    if is_blackjack(user_hand, dealers_hand):
-      play_again = play_again_choice(play_again)
-      if not(play_again):
-        break
-      
-    users_score,dealers_score = calculate_score(user_hand, dealers_hand)
-    if users_score > 21:
-      print(f"BUST: USER LOST AS SCORE IS {users_score}")
-      play_again = play_again_choice(play_again)
-      if not(play_again):
-        break
-    elif dealers_score > 21:
-      print(f"BUST: COMPUTER LOST AS SCORE IS {dealers_score}")
-      play_again = play_again_choice(play_again)
-      if not(play_again):
-        break
-    hit = True
-    while hit:
-      draw_another_card = input("Do you want to draw another card (Y / N) : ")   
-      if draw_another_card.upper() == "Y":
-        hit = True
-      elif draw_another_card.upper() == "N":
-        hit = False
-        break
-      else:
-        print("Assuming a No to Hit as wrong input was given")
-        hit = False
-        break
-      
-      users_score,dealers_score = calculate_score(user_hand, dealers_hand)
-      if(users_score > 21):
-        hit = False
-        break
-      else:
-        deal_cards(user_hand)
-        print(f"USER'S HAND IS {user_hand}")
-        print(f"COMPUTER'S HAND IS ['{dealers_hand[0]}', 'X']")
+    users_score, dealers_score = calculate_score(user_hand, dealers_hand)
+    print(f"USER'S HAND: {user_hand}, CURRENT SCORE: {users_score}")
+    print(f"COMPUTER'S HAND: ['{dealers_hand[0]}', 'X'], CURRENT SCORE: {deck[dealers_hand[0]]}")
+    if not is_blackjack(user_hand, dealers_hand):  
+      while not(users_score >= 21):
+        choice = input("Do you want another card? (Y / N): ")
+        if choice.upper() == "Y":
+          deal_cards(user_hand)
+        else:
+          break
+        users_score, dealers_score = calculate_score(user_hand, dealers_hand)
+        print(f"USER'S HAND: {user_hand}, CURRENT SCORE: {users_score}")
+        print(f"COMPUTER'S HAND: ['{dealers_hand[0]}', 'X'], CURRENT SCORE: {deck[dealers_hand[0]]}")
+        if users_score > 21:
+          break
 
-    while dealers_score < 17:
-      deal_cards(dealers_hand)
-    
-    users_score,dealers_score = calculate_score(user_hand, dealers_hand)
-    if dealers_score > 21:
-      print(f"USER'S HAND IS {user_hand} AND SCORE IS {users_score}")
-      print(f"COMPUTER'S HAND IS {dealers_hand} AND SCORE IS {dealers_score}")
-      print("USER WINS AS COMPUTER'S HAND EXCEEDS 21")
-    else:
-      print(f"USER'S HAND IS {user_hand} AND SCORE IS {users_score}")
-      print(f"COMPUTER'S HAND IS {dealers_hand} AND SCORE IS {dealers_score}")
-    
-    if users_score > dealers_score:
-      print(f"USER WINS AS SCORE IS {users_score}")
-    elif users_score < dealers_score:
-      print(f"COMPUTER WINS AS SCORE IS {dealers_score}")
-    else:
-      print("DRAW AS BOTH SCORES ARE EQUAL")
+      if not(users_score > 21):
+        while not(dealers_score > 17):
+          deal_cards(dealers_hand)
+          users_score, dealers_score = calculate_score(user_hand, dealers_hand)
+          if dealers_score > 21:
+            break
+        print(f"USER'S HAND: {user_hand}, CURRENT SCORE: {users_score}")
+        print(f"COMPUTER'S HAND: {dealers_hand}, CURRENT SCORE: {dealers_score}")
 
-    play_again = play_again_choice(play_again)
-    if not(play_again):
-      break
+        print(compare(users_score, dealers_score)) 
+      else:
+        print("BUST: You loose. User's score exceeded 21")
+
+      if play_again_choice(play_again):
+        play_blackjack(False)
+      else:
+        break    
+    else:
+      if play_again_choice(play_again):
+        play_blackjack(False)
+      else:
+        break 
+
+  print("THANK YOU FOR PLAYING")
     
-play_blackjack()
+play_blackjack(False)
