@@ -52,29 +52,23 @@ def calculate_score(user_hand, dealers_hand):
   users_score = 0
   dealers_score = 0
   
-  index_pos_user_hand = []
-  pos_user_hand = 0
-  index_pos_dealers_hand = []
-  pos_dealers_hand = 0
-  while True:
-    pos_user_hand = user_hand.index("A", pos_user_hand)
-    index_pos_user_hand.append(pos_user_hand)
-    pos_user_hand += 1
-  while True:
-    pos_dealers_hand = user_hand.index("A", pos_dealers_hand)
-    index_pos_dealers_hand.append(pos_dealers_hand)
-    pos_dealers_hand += 1
+  userAcount = user_hand.count("A")
+  dealersAcount = dealers_hand.count("A")
   
-  for hand in user_hand:
-    if hand == user_hand[index_pos_user_hand]:
-      deck[hand].value
-      
-      
-
-  for hand in dealers_hand:
-    dealers_score += deck[hand]
+  for card in user_hand:
+    if card != "A":
+      user_score += deck[card]
+  
+  if userAcount > 0:
+    user_score += 11 + (userAcount-1)
     
+  for card in dealers_hand:
+    if card != "A":
+      dealers_score += deck[card]
   
+  if dealersAcount > 0:
+    dealers_score += 11 + (dealersAcount-1)
+    
   return users_score,dealers_score
 
 def play_again_choice(play_again):
