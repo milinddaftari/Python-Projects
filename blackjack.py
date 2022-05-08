@@ -71,8 +71,9 @@ def calculate_score(user_hand, dealers_hand):
     
   return users_score,dealers_score
 
-def play_again_choice(play_again):
+def play_again_choice():
   """Choice to play again"""
+  play_again = False
   play_again_choice_selection = input("GAME OVER - Do you want to play again (Y / N): ")
   if play_again_choice_selection.upper() == "Y":
     play_again = True
@@ -107,10 +108,10 @@ def compare(users_score, dealers_score):
     return f"BUST: You loose as User's Score {users_score} is less than Computer's Score {dealers_score}"
 
 
-def play_blackjack(play_again):
+def play_blackjack():
   """Play blackjack"""
-  
-  while not play_again:
+  play_again = True
+  while play_again:
     user_hand = []
     users_score = 0
     deal_cards(user_hand)
@@ -150,16 +151,16 @@ def play_blackjack(play_again):
       else:
         print("BUST: You loose. User's score exceeded 21")
 
-      if play_again_choice(play_again):
-        play_blackjack(False)
+      if play_again_choice():
+        play_again = True
       else:
         break    
     else:
-      if play_again_choice(play_again):
-        play_blackjack(False)
+      if play_again_choice():
+        play_again = True
       else:
         break 
 
   print("THANK YOU FOR PLAYING")
     
-play_blackjack(False)
+play_blackjack()
